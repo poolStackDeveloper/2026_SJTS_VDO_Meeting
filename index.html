@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAMJIN TS Global Meeting Portal</title>
+<style>
+    :root {
+        --bg-0: #05080f;
+        --bg-1: #0b1220;
+        --bg-2: #111a2e;
+        --panel: rgba(18, 26, 45, 0.72);
+        --panel-border: rgba(120, 160, 220, 0.14);
+        --panel-border-strong: rgba(140, 180, 240, 0.28);
+        --text-0: #e6ecf7;
+        --text-1: #b8c2d6;
+        --text-2: #7f8aa3;
+        --accent: #4f8cff;
+        --accent-soft: rgba(79, 140, 255, 0.16);
+        --gold: #d6b26b;
+        --gold-soft: rgba(214, 178, 107, 0.14);
+        --success: #3ecf8e;
+        --warn: #f4b740;
+        --danger: #ef6464;
+        --radius-lg: 18px;
+        --radius-md: 12px;
+        --radius-sm: 8px;
+        --shadow-card: 0 18px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background: var(--bg-0);
+        color: var(--text-0);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard",
+                     "Apple SD Gothic Neo", "Noto Sans KR", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        background:
+            radial-gradient(1100px 600px at 85% -10%, rgba(79, 140, 255, 0.18), transparent 60%),
+            radial-gradient(900px 500px at 0% 100%, rgba(214, 178, 107, 0.08), transparent 60%),
+            linear-gradient(180deg, #05080f 0%, #070c17 40%, #05080f 100%);
+        background-attachment: fixed;
+    }
+
+    .wrap {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 28px 32px 80px;
+    }
+
+    /* ===== Header ===== */
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 18px 22px;
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: var(--radius-lg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4f8cff 0%, #2855c9 100%);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        font-size: 13px;
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(79, 140, 255, 0.35);
+    }
+
+    .brand-text h1 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+    }
+
+    .brand-text p {
+        margin: 2px 0 0;
+        font-size: 12.5px;
+        color: var(--text-2);
+        letter-spacing: 0.3px;
+    }
+
+    .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .clock {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .clock .date {
+        font-size: 12px;
+        color: var(--text-2);
+        letter-spacing: 0.4px;
+    }
+
+    .clock .time {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--text-0);
+        letter-spacing: 0.5px;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(62, 207, 142, 0.1);
+        border: 1px solid rgba(62, 207, 142, 0.25);
+        color: #9be9c4;
+        font-size: 12.5px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+    }
+
+    .status-pill::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(62, 207, 142, 0.6);
+        animation: pulse 2.4s ease-out infinite;
+    }
+
+    @keyframes pulse {
+        0%   { box-shadow: 0 0 0 0 rgba(62, 207, 142, 0.55); }
+        70%  { box-shadow: 0 0 0 8px rgba(62, 207, 142, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(62, 207, 142, 0); }
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+        margin-top: 32px;
+        padding: 44px 44px 38px;
+        background: linear-gradient(160deg, rgba(25, 38, 66, 0.85) 0%, rgba(14, 22, 40, 0.85) 100%);
+        border: 1px solid var(--panel-border-strong);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(600px 280px at 90% 0%, rgba(79, 140, 255, 0.18), transparent 60%),
+            radial-gradient(500px 260px at 10% 100%, rgba(214, 178, 107, 0.08), transparent 60%);
+        pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; }
+
+    .eyebrow {
+        display: inline-block;
+        padding: 5px 12px;
+        background: var(--accent-soft);
+        border: 1px solid rgba(79, 140, 255, 0.28);
+        border-radius: 999px;
+        color: #a9c4ff;
+        font-size: 11.5px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .hero h2 {
+        margin: 16px 0 10px;
+        font-size: 34px;
+        line-height: 1.25;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+        color: #f3f6fd;
+    }
+
+    .hero p.lead {
+        margin: 0 0 6px;
+        font-size: 15.5px;
+        color: var(--text-1);
+        max-width: 760px;
+    }
+
+    .hero p.sub {
+        margin: 10px 0 0;
+        font-size: 13px;
+        color: var(--text-2);
+        max-width: 760px;
+    }
+
+    .popup-hint {
+        margin-top: 22px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: rgba(244, 183, 64, 0.08);
+        border: 1px solid rgba(244, 183, 64, 0.22);
+        border-radius: var(--radius-md);
+        color: #f3d18a;
+        font-size: 13px;
+    }
+
+    /* ===== Entry Cards ===== */
+    .section-title {
+        margin: 44px 0 18px;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .section-title h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+    }
+
+    .section-title span {
+        font-size: 12.5px;
+        color: var(--text-2);
+    }
+
+    .entry-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+
+    .entry-card {
+        position: relative;
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: var(--radius-lg);
+        padding: 28px 24px 24px;
+        cursor: pointer;
+        text-align: left;
+        color: var(--text-0);
+        font-family: inherit;
+        transition: transform 0.18s ease, border-color 0.18s ease,
+                    background 0.18s ease, box-shadow 0.18s ease;
+        overflow: hidden;
+    }
+
+    .entry-card::after {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; top: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(79, 140, 255, 0.55), transparent);
+        opacity: 0.55;
+    }
+
+    .entry-card .flag {
+        font-size: 11px;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: var(--text-2);
+        font-weight: 600;
+    }
+
+    .entry-card .country {
+        margin-top: 10px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.1px;
+    }
+
+    .entry-card .role {
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--text-1);
+    }
+
+    .entry-card .enter {
+        margin-top: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 13px;
+        color: var(--text-0);
+        font-weight: 500;
+        transition: background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .entry-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--panel-border-strong);
+        background: rgba(24, 34, 58, 0.85);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4);
+    }
+
+    .entry-card:hover .enter {
+        background: var(--accent-soft);
+        border-color: rgba(79, 140, 255, 0.35);
+        color: #cfdcff;
+    }
+
+    .entry-card.director {
+        background:
+            linear-gradient(160deg, rgba(214, 178, 107, 0.10), rgba(214, 178, 107, 0.02) 60%),
+            rgba(18, 26, 45, 0.72);
+        border-color: rgba(214, 178, 107, 0.28);
+    }
+
+    .entry-card.director::after {
+        background: linear-gradient(90deg, transparent, rgba(214, 178, 107, 0.7), transparent);
+        opacity: 0.85;
+    }
+
+    .entry-card.director .flag { color: var(--gold); }
+
+    .entry-card.director:hover {
+        border-color: rgba(214, 178, 107, 0.5);
+    }
+
+    .entry-card.director:hover .enter {
+        background: var(--gold-soft);
+        border-color: rgba(214, 178, 107, 0.4);
+        color: #f1d89a;
+    }
+
+    /* ===== Roles Grid ===== */
+    .roles {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .role-card {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: var(--radius-lg);
+        padding: 24px 24px 22px;
+    }
+
+    .role-card h4 {
+        margin: 0 0 4px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.1px;
+    }
+
+    .role-card .tag {
+        display: inline-block;
+        font-size: 10.5px;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .role-card.samjin .tag  { background: rgba(79, 140, 255, 0.14); color: #a9c4ff; }
+    .role-card.vdo .tag     { background: rgba(62, 207, 142, 0.14); color: #9be9c4; }
+    .role-card.obsbot .tag  { background: rgba(214, 178, 107, 0.14); color: #f1d89a; }
+
+    .role-card ul {
+        margin: 10px 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .role-card li {
+        position: relative;
+        padding-left: 18px;
+        margin: 6px 0;
+        color: var(--text-1);
+        font-size: 13.5px;
+    }
+
+    .role-card li::before {
+        content: "";
+        position: absolute;
+        left: 2px; top: 10px;
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--text-2);
+    }
+
+    .role-card.samjin li::before { background: #4f8cff; }
+    .role-card.vdo li::before    { background: #3ecf8e; }
+    .role-card.obsbot li::before { background: #d6b26b; }
+
+    /* ===== Two-column Info Blocks ===== */
+    .info-grid {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .info-card {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: var(--radius-lg);
+        padding: 26px 26px 22px;
+    }
+
+    .info-card h4 {
+        margin: 0 0 14px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .info-card ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .info-card li {
+        display: flex;
+        gap: 12px;
+        padding: 10px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 13.5px;
+        color: var(--text-1);
+    }
+
+    .info-card li:first-child { border-top: none; }
+
+    .info-card li .k {
+        flex: 0 0 44%;
+        color: var(--text-0);
+        font-weight: 500;
+    }
+
+    .info-card li .v { color: var(--text-1); }
+
+    .checklist li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 9px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 13.5px;
+        color: var(--text-1);
+    }
+
+    .checklist li:first-child { border-top: none; }
+
+    .checklist li::before {
+        content: "";
+        flex: 0 0 16px;
+        height: 16px;
+        margin-top: 3px;
+        border-radius: 4px;
+        border: 1.5px solid rgba(79, 140, 255, 0.5);
+        background:
+            linear-gradient(135deg, transparent 45%, rgba(79, 140, 255, 0.6) 46%, rgba(79, 140, 255, 0.6) 54%, transparent 55%),
+            linear-gradient(45deg, transparent 45%, rgba(79, 140, 255, 0.6) 46%, rgba(79, 140, 255, 0.6) 54%, transparent 55%);
+        background-size: 10px 10px;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+        margin-top: 40px;
+        padding: 20px 24px;
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        color: var(--text-2);
+        font-size: 12.5px;
+    }
+
+    .footer code {
+        padding: 2px 8px;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text-1);
+        font-size: 12px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1024px) {
+        .entry-grid { grid-template-columns: repeat(2, 1fr); }
+        .roles      { grid-template-columns: 1fr; }
+        .info-grid  { grid-template-columns: 1fr; }
+        .hero h2    { font-size: 28px; }
+    }
+
+    @media (max-width: 640px) {
+        .wrap { padding: 18px 16px 60px; }
+        .header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px;
+        }
+        .header-meta {
+            width: 100%;
+            justify-content: space-between;
+        }
+        .hero { padding: 28px 22px; }
+        .hero h2 { font-size: 24px; }
+        .entry-grid { grid-template-columns: 1fr; }
+        .footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .info-card li { flex-direction: column; gap: 2px; }
+        .info-card li .k { flex: none; }
+    }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <!-- ===== Header ===== -->
+    <header class="header">
+        <div class="brand">
+            <div class="brand-mark">STS</div>
+            <div class="brand-text">
+                <h1>SAMJIN TS Global Meeting Portal</h1>
+                <p>Korea · Philippines · Vietnam Video Conference Access Hub</p>
+            </div>
+        </div>
+        <div class="header-meta">
+            <div class="clock">
+                <div class="date" id="dateText">—</div>
+                <div class="time" id="timeText">--:--:--</div>
+            </div>
+            <span class="status-pill">Ready to Connect</span>
+        </div>
+    </header>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+        <div class="hero-inner">
+            <span class="eyebrow">Global Conference Access</span>
+            <h2>Global Video Conference Access</h2>
+            <p class="lead">
+                한국, 필리핀, 베트남 3자 화상회의를 위한 전용 입장 포털입니다.
+                아래 입장 버튼을 선택하여 지정된 회의방으로 바로 접속할 수 있습니다.
+            </p>
+            <p class="sub">
+                이 페이지는 VDO.Ninja 회의방 접속을 중계하며, 실제 영상 연결은 VDO.Ninja에서 처리됩니다.
+                카메라 줌·PTZ·트래킹 등 장비 제어는 OBSBOT Center 또는 OBSBOT 장비 자체 기능에서 수행합니다.
+            </p>
+            <div class="popup-hint">
+                ⚠ 새 창 차단 설정이 활성화되어 있으면 입장 창이 열리지 않을 수 있습니다. 브라우저 팝업 차단을 해제해 주세요.
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Entry Cards ===== -->
+    <div class="section-title">
+        <h3>회의 입장</h3>
+        <span>버튼을 클릭하면 VDO.Ninja 회의방이 새 창으로 열립니다.</span>
+    </div>
+    <div class="entry-grid" id="entryGrid">
+        <button class="entry-card" data-target="korea">
+            <div class="flag">Site · KR</div>
+            <div class="country">한국 본사</div>
+            <div class="role">Headquarters Participant</div>
+            <div class="enter">회의방 입장 →</div>
+        </button>
+        <button class="entry-card" data-target="philippines">
+            <div class="flag">Site · PH</div>
+            <div class="country">필리핀 현장</div>
+            <div class="role">Philippines Field Participant</div>
+            <div class="enter">회의방 입장 →</div>
+        </button>
+        <button class="entry-card" data-target="vietnam">
+            <div class="flag">Site · VN</div>
+            <div class="country">베트남 현장</div>
+            <div class="role">Vietnam Field Participant</div>
+            <div class="enter">회의방 입장 →</div>
+        </button>
+        <button class="entry-card director" data-target="director">
+            <div class="flag">Control · Director</div>
+            <div class="country">관리자 / Director</div>
+            <div class="role">Meeting Controller</div>
+            <div class="enter">Director 입장 →</div>
+        </button>
+    </div>
+
+    <!-- ===== Roles ===== -->
+    <div class="section-title">
+        <h3>역할 구분</h3>
+        <span>각 시스템이 담당하는 영역을 명확히 구분합니다.</span>
+    </div>
+    <div class="roles">
+        <div class="role-card samjin">
+            <span class="tag">SAMJIN TS Portal</span>
+            <h4>삼진TS 포털이 하는 일</h4>
+            <ul>
+                <li>회의 입장 링크 제공</li>
+                <li>사용자 안내</li>
+                <li>현장별 접속 구분</li>
+                <li>회의 전 체크리스트 제공</li>
+            </ul>
+        </div>
+        <div class="role-card vdo">
+            <span class="tag">VDO.Ninja</span>
+            <h4>VDO.Ninja가 하는 일</h4>
+            <ul>
+                <li>실제 화상회의 연결</li>
+                <li>영상 / 음성 송수신</li>
+                <li>브라우저 카메라 / 마이크 권한 처리</li>
+                <li>화면공유 및 회의방 기능 제공</li>
+            </ul>
+        </div>
+        <div class="role-card obsbot">
+            <span class="tag">OBSBOT Device</span>
+            <h4>OBSBOT이 하는 일</h4>
+            <ul>
+                <li>카메라 줌 / 화각 조정</li>
+                <li>PTZ 제어</li>
+                <li>AI 트래킹</li>
+                <li>카메라 장비 설정</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== Checklist & Troubleshooting ===== -->
+    <div class="section-title">
+        <h3>회의 전 점검 및 문제 해결</h3>
+        <span>회의 시작 5분 전에 확인해 주세요.</span>
+    </div>
+    <div class="info-grid">
+        <div class="info-card">
+            <h4>회의 전 체크리스트</h4>
+            <ul class="checklist">
+                <li>OBSBOT 카메라를 USB로 연결했는지 확인</li>
+                <li>Chrome 또는 Edge 브라우저 사용</li>
+                <li>입장 후 카메라 목록에서 OBSBOT 선택</li>
+                <li>마이크 중복 선택 여부 확인</li>
+                <li>이어폰 또는 회의용 스피커폰 사용 권장</li>
+                <li>가능하면 유선 인터넷 사용</li>
+                <li>불필요한 프로그램 종료</li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <h4>문제 발생 시 조치방법</h4>
+            <ul>
+                <li><span class="k">영상이 안 나올 때</span><span class="v">브라우저 카메라 권한 확인</span></li>
+                <li><span class="k">OBSBOT이 안 보일 때</span><span class="v">USB 연결 및 UVC 모드 확인</span></li>
+                <li><span class="k">소리가 울릴 때</span><span class="v">이어폰 사용 또는 스피커 볼륨 조정</span></li>
+                <li><span class="k">끊김이 심할 때</span><span class="v">Wi-Fi 대신 유선 인터넷 사용</span></li>
+                <li><span class="k">접속이 안 될 때</span><span class="v">vdo.ninja 접속 가능 여부 확인</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== Footer ===== -->
+    <footer class="footer">
+        <div>SAMJIN TS · Global Meeting Portal · Powered by VDO.Ninja</div>
+        <div>Meeting Room: <code id="roomNameLabel">samjin-global-meeting</code></div>
+    </footer>
+
+</div>
+
+<script>
+    /* ============================================================
+     * SAMJIN TS Global Meeting Portal
+     * 회의방 이름과 입장 URL은 아래 상수만 수정하면 전체 적용됨.
+     * ============================================================ */
+    const VDO_NINJA_ROOM_NAME = "samjin-global-meeting";
+    const VDO_NINJA_BASE      = "https://vdo.ninja/";
+
+    const ENTRY_URLS = {
+        korea:       `${VDO_NINJA_BASE}?room=${VDO_NINJA_ROOM_NAME}&label=Korea`,
+        philippines: `${VDO_NINJA_BASE}?room=${VDO_NINJA_ROOM_NAME}&label=Philippines`,
+        vietnam:     `${VDO_NINJA_BASE}?room=${VDO_NINJA_ROOM_NAME}&label=Vietnam`,
+        director:    `${VDO_NINJA_BASE}?director=${VDO_NINJA_ROOM_NAME}`,
+    };
+
+    /* ---------- Clock ---------- */
+    const dateEl = document.getElementById("dateText");
+    const timeEl = document.getElementById("timeText");
+
+    function pad2(n) { return String(n).padStart(2, "0"); }
+
+    function updateClock() {
+        const now = new Date();
+        const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+        const y = now.getFullYear();
+        const m = pad2(now.getMonth() + 1);
+        const d = pad2(now.getDate());
+        const w = weekdays[now.getDay()];
+        dateEl.textContent = `${y}.${m}.${d} (${w})`;
+        timeEl.textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    /* ---------- Entry Buttons ---------- */
+    document.getElementById("entryGrid").addEventListener("click", (e) => {
+        const card = e.target.closest(".entry-card");
+        if (!card) return;
+
+        const key = card.dataset.target;
+        const url = ENTRY_URLS[key];
+        if (!url) return;
+
+        const popup = window.open(url, "_blank", "noopener,noreferrer");
+        if (!popup) {
+            alert(
+                "새 창이 차단되었습니다.\n\n" +
+                "브라우저 주소창 우측의 팝업 차단 아이콘을 눌러 허용한 후 다시 시도해 주세요.\n" +
+                "계속 열리지 않으면 아래 주소를 직접 복사해 브라우저에 붙여 넣으세요:\n\n" + url
+            );
+        }
+    });
+
+    /* ---------- Room label in footer ---------- */
+    document.getElementById("roomNameLabel").textContent = VDO_NINJA_ROOM_NAME;
+</script>
+</body>
+</html>
