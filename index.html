@@ -742,14 +742,7 @@
         const url = ENTRY_URLS[key];
         if (!url) return;
 
-        const popup = window.open(url, "_blank", "noopener,noreferrer");
-        if (!popup) {
-            alert(
-                "새 창이 차단되었습니다.\n\n" +
-                "브라우저 주소창 우측의 팝업 차단 아이콘을 눌러 허용한 후 다시 시도해 주세요.\n" +
-                "계속 열리지 않으면 아래 주소를 직접 복사해 브라우저에 붙여 넣으세요:\n\n" + url
-            );
-        }
+        window.open(url, "_blank", "noopener,noreferrer");
     });
 
     /* ---------- Room label in footer ---------- */
